@@ -3,12 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import {
-  JwPaginationComponent,
-  JwPaginationModule,
-} from 'jw-angular-pagination';
+import { JwPaginationModule } from 'jw-angular-pagination';
 
 @NgModule({
   imports: [
@@ -17,8 +15,9 @@ import {
     BrowserAnimationsModule,
     NgxPaginationModule,
     JwPaginationModule,
+    HttpClientModule,
   ],
-  declarations: [AppComponent, JwPaginationComponent],
+  declarations: [AppComponent],
   providers: [],
   bootstrap: [AppComponent],
 })
