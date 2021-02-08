@@ -1,8 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -25,23 +23,6 @@ const useStyles = makeStyles((theme) => ({
   heroButtons: {
     marginTop: theme.spacing(4),
   },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-    align: "center",
-  },
-  card: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  cardMedia: {
-    paddingTop: "56.25%",
-    alignItems: "center",
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
   root: {
     marginTop: theme.spacing(2),
     flexGrow: 1,
@@ -52,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(6),
   },
   imageCenter: {
-    alignItems: "center",
+    justify: "center",
   },
 }));
 
@@ -89,15 +70,32 @@ function a11yProps(index) {
   };
 }
 
-const cards = [1];
-
 export default function Album() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
+  const [count, setCount] = useState("");
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  function loadIMAG() {
+    console.log("test");
+    fetch(
+      "https://api.nasa.gov/planetary/apod?api_key=8YDVgVuKzVl3dx2IYvRmBjidFPtF3bANvzwHZs2s"
+    )
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          console.log(result);
+          setCount(result.url);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
 
   return (
     <React.Fragment>
@@ -119,15 +117,6 @@ export default function Album() {
             <Tab label="ROVER" {...a11yProps(0)} />
             <Tab label="CAMERA" {...a11yProps(1)} />
             <Tab label="SOL" {...a11yProps(2)} />
-            {/* <Typography
-              component="h4"
-              variant="h4"
-              color="wiht"
-              gutterBottom
-              marginRight
-            >
-              NASA Api
-            </Typography> */}
           </Tabs>
         </AppBar>
       </Container>
@@ -136,7 +125,7 @@ export default function Album() {
         <div className={classes.heroButtons}>
           <Grid container spacing={2} justify="center">
             <Grid item>
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={loadIMAG}>
                 Curiosity
               </Button>
             </Grid>
@@ -170,13 +159,7 @@ export default function Album() {
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Typography
-          component="h3"
-          variant="h3"
-          color="wiht"
-          // gutterBottom
-          align="center"
-        >
+        <Typography component="h3" variant="h3" color="wiht" align="center">
           Mars day
         </Typography>
       </TabPanel>
@@ -193,21 +176,21 @@ export default function Album() {
               NASA Api
             </Typography>
           </Container>
+          <Typography component="h3" variant="h3" color="wiht" align="center">
+            <div className={classes.imageCenter}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={loadIMAG}
+                justify="center"
+              >
+                GET image from NASA Api
+              </Button>
+            </div>
+          </Typography>
         </div>
         <div className={classes.imageCenter}>
-          <Grid container spacing={0}>
-            {cards.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
-                <Card className={classes.card}>
-                  <CardMedia
-                    className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
-                    title="Image title"
-                  />
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+          <img src={count} alt="" width="100%"></img>
           <div className={classes.root}>
             <Pagination count={5} color="primary" justify="center" />
           </div>
